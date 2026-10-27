@@ -6,17 +6,18 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('indicatif_pays', 5); // ex: +90, +226
+            $table->string('numero_telephone', 20);
+            $table->string('mot_de_passe');
+            $table->boolean('a_une_candidature_existante')->default(false);
+            $table->string('numero_identifiant_parrain')->nullable();
+            $table->string('nom_parrain')->nullable();
+            $table->timestamp('pdpl_accepte_le')->nullable(); // Horodatage de l'acceptation de la loi PDPL
             $table->rememberToken();
             $table->timestamps();
         });
@@ -37,13 +38,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
